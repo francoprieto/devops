@@ -1,0 +1,15 @@
+# PASO 1
+sudo mkdir /opt/certs /opt/registryi
+sudo openssl req -newkey rsa:4096 -nodes -sha256 -keyout /opt/certs/local-registry.key -x509 -days 365 -out /opt/certs/local-registry.crt  -subj "/CN=[registry-hostname]" -addext "subjectAltName=DNS:[registry-hostname],IP:[registry-ip]"
+
+#PASO 2
+sudo microk8s.kubectl create -f docker-repo/private-registry.yaml
+
+#PASO 3
+sudo cp /opt/certs/local-registry.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates
+sudo snap stop docker
+sudo snap start docker
+
+#PASO 4
+sudo microk8s.kubectl create -f docker-repo/private-registry-svc.yaml

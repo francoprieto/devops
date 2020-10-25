@@ -1,0 +1,12 @@
+#PASO 1
+sudo docker build --tag wildfly:21.0 .
+#PASO 2
+sudo docker tag wildfly:21.0 [registry-hostname]:31320/wildfly:21.0
+#PASO 3
+sudo docker push [registry-hostname]:31320/wildfly:21.0
+#PASO 4
+sudo microk8s.kubectl create -f wildfly-pod.yaml
+#PASO 5
+sudo microk8s.kubectl get deployments 
+sudo microk8s.kubectl expose deployments/wildfly-pod
+sudo microk8s.kubectl port-forward service/wildfly-pod 8080:8080 --address 0.0.0.0

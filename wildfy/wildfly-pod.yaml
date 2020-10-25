@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wildfly-pod 
+  labels:
+    app: wildfly
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wildfly
+  template:
+    metadata:
+      labels:
+        app: wildfly
+    spec:
+      containers:
+      - name: wildfly
+        image: ubuntusrv:31320/wildfly:21.0
+        ports:
+        - containerPort: 8080
